@@ -26,4 +26,5 @@ X0 Vin Vss Vdd Vout INVX1
     * Plot
     plot -Vpower:power
     meas tran power_avg avg Vpower:power
+    wrdata power_avg.txt power_avg:result
 .endc
