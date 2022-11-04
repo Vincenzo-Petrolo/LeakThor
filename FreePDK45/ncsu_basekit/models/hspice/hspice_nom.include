@@ -1,0 +1,2 @@
+.inc ./tran_models/models_nom/NMOS_VTL.inc
+.inc ./tran_models/models_nom/PMOS_VTL.inc
