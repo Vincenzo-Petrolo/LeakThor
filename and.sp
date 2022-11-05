@@ -10,13 +10,15 @@
 .option TEMP=25c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Va Vina 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
-Vb Vinb 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
-Cloady Vouty 0 1nF
+Vina Va 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
+Vinb Vb 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
+Cloady Vy 0 1nF
+XANDy Va Vb Vdd Vss Vy AND2X1
 .tran 10n 10u
 .probe P(Vpower)
 .control
 run
+plot -Vpower:power
 meas tran power_avg avg Vpower:power
-wrdata power_avg.txt power_avg
+wrdata power_consumption.txt Vpower:power
 .endc
