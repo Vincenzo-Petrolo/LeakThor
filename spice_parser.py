@@ -2,6 +2,7 @@
     This program parses a Circuit object into a SPICE netlist
 """
 import circuit as cr
+import random
 
 # Library includes
 path2transistors = "./FreePDK45/ncsu_basekit/models/hspice/hspice_nom.include"
@@ -65,9 +66,15 @@ class SpiceParser(object):
             f.close()
     
     def _createInputsPowerSupply(self, filename, circuit):
+        # The input switching uses Montecarlo to catch more randomness
         with open(filename, 'a') as f:
             for input in circuit.inputs.keys():
-                f.write(f"Vin{input} V{input} 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)\n")
+                Td = random.randint(1,10) # add delay picking randomly between 1 and 10
+                Tw = random.randint(1,10) # width of pulse picking randomly between 1 and 10
+                To = random.randint(Tw,2*Tw) # period of pulse picking randomly between Twidth and 2Twidth
+
+                # PULSE PULSE(Vo V1 Td Tr Tf Tw To)
+                f.write(f"Vin{input} V{input} 0 dc pulse (0 1.1 {Td}n 1n 1n {Tw}n {To}n)\n")
             f.close()
 
     def _createOutputLoadCapacitance(self, filename, circuit):
@@ -78,7 +85,7 @@ class SpiceParser(object):
 
     def _writeSimulationInfos(self, filename):
         with open(filename, 'a') as f:
-            f.write(".tran 10n 10u\n")
+            f.write(".tran 1n 1u\n")
             f.write(".probe P(Vpower)\n")
             f.write(".control\n")
             f.write("run\n")
