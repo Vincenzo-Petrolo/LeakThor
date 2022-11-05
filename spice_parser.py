@@ -80,12 +80,13 @@ class SpiceParser(object):
     def _createOutputLoadCapacitance(self, filename, circuit):
         with open(filename, 'a') as f:
             for output in circuit.outputs.keys():
-                f.write(f"Cload{output} V{output} 0 1nF\n")
+                # capacitance : 0.00155103pF; of INVX1
+                f.write(f"Cload{output} V{output} 0 0.00155103pF\n")
             f.close()
 
     def _writeSimulationInfos(self, filename):
         with open(filename, 'a') as f:
-            f.write(".tran 1n 1u\n")
+            f.write(".tran 1n 100n\n")
             f.write(".probe P(Vpower)\n")
             f.write(".control\n")
             f.write("run\n")
