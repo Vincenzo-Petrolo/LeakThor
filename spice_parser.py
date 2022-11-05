@@ -93,7 +93,29 @@ class SpiceParser(object):
             # go through each node
             for node in circuit.nodes.values():
                 if (node.function == cr.__AND__):
+                    #.subckt AND2X1  A B VDD GND Y
                     f.write(f"XAND{node.name} V{node.fan_in[0]} V{node.fan_in[1]} Vdd Vss V{node.name} AND2X1\n")
+                elif (node.function == cr.__NAND__):
+                    #.subckt NAND2X1  A GND B Y VDD
+                    f.write(f"XNAND{node.name} V{node.fan_in[0]} Vss V{node.fan_in[1]} V{node.name} Vdd NAND2X1\n")
+                elif (node.function == cr.__OR__):
+                    #.subckt OR2X1  A B VDD GND Y
+                    f.write(f"XOR{node.name} V{node.fan_in[0]} V{node.fan_in[1]} Vdd Vss V{node.name} OR2X1\n")
+                elif (node.function == cr.__NOR__):
+                    #.subckt NOR2X1  A VDD B Y GND
+                    f.write(f"XNOR{node.name} V{node.fan_in[0]} Vdd V{node.fan_in[1]} V{node.name} Vss NOR2X1\n")
+                elif (node.function == cr.__NOT__):
+                    #.subckt INVX1  A GND VDD Y
+                    f.write(f"XINV{node.name} V{node.fan_in[0]} Vss Vdd V{node.name} INVX1\n")
+                elif (node.function == cr.__BUF__):
+                    #.subckt BUFX2  Y GND VDD A
+                    f.write(f"XBUF{node.name} V{node.name} Vss Vdd V{node.fan_in[0]} BUFX2\n")
+                elif (node.function == cr.__XOR__):
+                    #.subckt XOR2X1  B Y A VDD GND
+                    f.write(f"XOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vdd Vss XOR2X1\n")
+                elif (node.function == cr.__XNOR__):
+                    #.subckt XNOR2X1  B Y A GND VDD
+                    f.write(f"XNOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vss Vdd XOR2X1\n")
 
 
             f.close()
