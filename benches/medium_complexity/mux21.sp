@@ -10,15 +10,15 @@
 .option TEMP=25c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vina Va 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
-Vinb Vb 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
-Vins Vs 0 dc pulse (0 1.1 1u 1u 1u 1u 5u)
+Vina Va 0 dc pulse (0 1.1 2n 1n 1n 4n 8n)
+Vinb Vb 0 dc pulse (0 1.1 3n 1n 1n 9n 13n)
+Vins Vs 0 dc pulse (0 1.1 7n 1n 1n 8n 15n)
 Cloady Vy 0 1nF
 XINVk Vs Vss Vdd Vk INVX1
 XANDa1 Va Vk Vdd Vss Va1 AND2X1
 XANDa2 Vb Vs Vdd Vss Va2 AND2X1
 XORy Va1 Va2 Vdd Vss Vy OR2X1
-.tran 10n 10u
+.tran 1n 1u
 .probe P(Vpower)
 .control
 run
