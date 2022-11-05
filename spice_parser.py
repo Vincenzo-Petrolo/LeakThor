@@ -56,7 +56,7 @@ class SpiceParser(object):
 
     def _writeOptions(self, filename):
         with open(filename, 'a') as f:
-            f.write('.option TEMP=25c\n')
+            f.write('.option TEMP=27c\n')
             f.close()
 
     def _createPowerSupply(self, filename):
@@ -70,11 +70,14 @@ class SpiceParser(object):
         with open(filename, 'a') as f:
             for input in circuit.inputs.keys():
                 Td = random.randint(1,10) # add delay picking randomly between 1 and 10
-                Tw = random.randint(1,10) # width of pulse picking randomly between 1 and 10
+                Tw = random.randint(20,30) # width of pulse picking randomly between 1 and 10
                 To = random.randint(Tw,2*Tw) # period of pulse picking randomly between Twidth and 2Twidth
 
                 # PULSE PULSE(Vo V1 Td Tr Tf Tw To)
-                f.write(f"Vin{input} V{input} 0 dc pulse (0 1.1 {Td}n 1n 1n {Tw}n {To}n)\n")
+                f.write(f"Vin{input} V{input}_ 0 dc pulse (0 1.1 {Td}n 1n 1n {Tw}n {To}n)\n")
+                # Create buffers to simulate a non ideal power supply
+                #.subckt BUFX2  Y GND VDD A
+                f.write(f"XBUFIN{input} V{input} Vss Vdd V{input}_ BUFX2\n")
             f.close()
 
     def _createOutputLoadCapacitance(self, filename, circuit):
@@ -86,7 +89,7 @@ class SpiceParser(object):
 
     def _writeSimulationInfos(self, filename):
         with open(filename, 'a') as f:
-            f.write(".tran 1n 100n\n")
+            f.write(".tran 0.1n 100n\n")
             f.write(".probe P(Vpower)\n")
             f.write(".control\n")
             f.write("run\n")
