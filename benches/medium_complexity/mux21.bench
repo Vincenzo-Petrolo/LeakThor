@@ -1,0 +1,8 @@
+INPUT(a)
+INPUT(b)
+INPUT(s)
+k = NOT(s)
+a1 = AND(a, k)
+a2 = AND(b, s)
+y = OR(a1, a2)
+OUTPUT(y)

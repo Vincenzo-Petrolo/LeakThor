@@ -30,7 +30,7 @@ class SpiceParser(object):
     def convert(self,circuit):
         print("Starting conversion")
         # Create new filename by removing .bench and appending .sp extension
-        filename = circuit.name.strip('.bench') + ".sp"
+        filename = circuit.name.removesuffix('.bench') + ".sp"
         # Write the includes for adding the library of gates
         self._writeIncludes(filename)
         # Write the options such as temperature
@@ -115,7 +115,7 @@ class SpiceParser(object):
                     f.write(f"XOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vdd Vss XOR2X1\n")
                 elif (node.function == cr.__XNOR__):
                     #.subckt XNOR2X1  B Y A GND VDD
-                    f.write(f"XNOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vss Vdd XOR2X1\n")
+                    f.write(f"XNOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vss Vdd XNOR2X1\n")
 
 
             f.close()
