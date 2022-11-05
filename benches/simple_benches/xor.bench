@@ -1,0 +1,4 @@
+INPUT(a)
+INPUT(b)
+y = XOR(a,b)
+OUTPUT(y)

@@ -1,0 +1,4 @@
+INPUT(a)
+INPUT(b)
+y = NAND(a,b)
+OUTPUT(y)

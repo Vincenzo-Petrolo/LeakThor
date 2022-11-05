@@ -1,0 +1,4 @@
+INPUT(a)
+INPUT(b)
+y = NOR(a,b)
+OUTPUT(y)
