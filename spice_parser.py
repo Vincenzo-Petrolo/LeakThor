@@ -3,6 +3,7 @@
 """
 import circuit as cr
 import random
+import lut
 
 # Library includes
 path2transistors = "./FreePDK45/ncsu_basekit/models/hspice/hspice_nom.include"
@@ -25,11 +26,13 @@ includes = [path2transistors,
 
 class SpiceParser(object):
     def __init__(self) -> None:
+        self.total_leak_power = 0
         pass
 
     # Converts a circuit object into a spice netlist
     def convert(self,circuit):
         print("Starting conversion")
+        self.total_leak_power = 0
         # Create new filename by removing .bench and appending .sp extension
         filename = circuit.name.removesuffix('.bench') + ".sp"
         # Write the includes for adding the library of gates
@@ -78,6 +81,9 @@ class SpiceParser(object):
                 # Create buffers to simulate a non ideal power supply
                 #.subckt BUFX2  Y GND VDD A
                 f.write(f"XBUFIN{input} V{input} Vss Vdd V{input}_ BUFX2\n")
+                
+                # increase the leakage power
+                self.total_leak_power += lut.BUFX2_leak
             f.close()
 
     def _createOutputLoadCapacitance(self, filename, circuit):
@@ -97,6 +103,7 @@ class SpiceParser(object):
             f.write("meas tran power_avg avg Vpower:power\n")
             f.write("wrdata power_consumption.txt Vpower:power\n")
             f.write(".endc\n")
+            f.write(f"* Leakage power estimation: {self.total_leak_power} nW\n")
             f.close()
 
     def _writeCircuit(self, filename, circuit):
@@ -106,27 +113,35 @@ class SpiceParser(object):
                 if (node.function == cr.__AND__):
                     #.subckt AND2X1  A B VDD GND Y
                     f.write(f"XAND{node.name} V{node.fan_in[0]} V{node.fan_in[1]} Vdd Vss V{node.name} AND2X1\n")
+                    self.total_leak_power += lut.AND2X1_leak
                 elif (node.function == cr.__NAND__):
                     #.subckt NAND2X1  A GND B Y VDD
                     f.write(f"XNAND{node.name} V{node.fan_in[0]} Vss V{node.fan_in[1]} V{node.name} Vdd NAND2X1\n")
+                    self.total_leak_power += lut.NAND2X1_leak
                 elif (node.function == cr.__OR__):
                     #.subckt OR2X1  A B VDD GND Y
                     f.write(f"XOR{node.name} V{node.fan_in[0]} V{node.fan_in[1]} Vdd Vss V{node.name} OR2X1\n")
+                    self.total_leak_power += lut.OR2X1_leak
                 elif (node.function == cr.__NOR__):
                     #.subckt NOR2X1  A VDD B Y GND
                     f.write(f"XNOR{node.name} V{node.fan_in[0]} Vdd V{node.fan_in[1]} V{node.name} Vss NOR2X1\n")
+                    self.total_leak_power += lut.NOR2X1_leak
                 elif (node.function == cr.__NOT__):
                     #.subckt INVX1  A GND VDD Y
                     f.write(f"XINV{node.name} V{node.fan_in[0]} Vss Vdd V{node.name} INVX1\n")
+                    self.total_leak_power += lut.INVX1_leak
                 elif (node.function == cr.__BUF__):
                     #.subckt BUFX2  Y GND VDD A
                     f.write(f"XBUF{node.name} V{node.name} Vss Vdd V{node.fan_in[0]} BUFX2\n")
+                    self.total_leak_power += lut.BUFX2_leak
                 elif (node.function == cr.__XOR__):
                     #.subckt XOR2X1  B Y A VDD GND
                     f.write(f"XOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vdd Vss XOR2X1\n")
+                    self.total_leak_power += lut.XOR2X1_leak
                 elif (node.function == cr.__XNOR__):
                     #.subckt XNOR2X1  B Y A GND VDD
                     f.write(f"XNOR{node.name} V{node.fan_in[1]} V{node.name} V{node.fan_in[0]} Vss Vdd XNOR2X1\n")
+                    self.total_leak_power += lut.XNOR2X1_leak
 
 
             f.close()
