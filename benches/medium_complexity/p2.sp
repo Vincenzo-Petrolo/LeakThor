@@ -10,15 +10,22 @@
 .option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vin0 V0_ 0 dc pulse (0 1.1 9n 1n 1n 24n 38n)
-XBUFIN0 V0 Vss Vdd V0_ BUFX2
-Vin1 V1_ 0 dc pulse (0 1.1 5n 1n 1n 22n 43n)
-XBUFIN1 V1 Vss Vdd V1_ BUFX2
-Cload5 V5 0 0.00155103pF
-XINV2 V0 Vss Vdd V2 INVX1
-XNOR3 V1 Vdd V1 V3 Vss NOR2X1
-XINV4 V1 Vss Vdd V4 INVX1
-XNAND5 V1 Vss V1 V5 Vdd NAND2X1
+Vina Va_ 0 dc pulse (0 1.1 6n 1n 1n 25n 35n)
+XBUFINa Va Vss Vdd Va_ BUFX2
+Vinb Vb_ 0 dc pulse (0 1.1 7n 1n 1n 22n 31n)
+XBUFINb Vb Vss Vdd Vb_ BUFX2
+Vinc Vc_ 0 dc pulse (0 1.1 5n 1n 1n 27n 37n)
+XBUFINc Vc Vss Vdd Vc_ BUFX2
+Vind Vd_ 0 dc pulse (0 1.1 2n 1n 1n 21n 36n)
+XBUFINd Vd Vss Vdd Vd_ BUFX2
+Cloady Vy 0 0.00155103pF
+Cloadz Vz 0 0.00155103pF
+XANDg Va Vb Vdd Vss Vg AND2X1
+XORk Vg Vc Vdd Vss Vk OR2X1
+XINVi Vg Vss Vdd Vi INVX1
+XINVe Vb Vss Vdd Ve INVX1
+XNANDy Vi Vss Vk Vy Vdd NAND2X1
+XNORz Vk Vdd Ve Vz Vss NOR2X1
 .tran 0.1n 100n
 .probe P(Vpower)
 .control
@@ -27,4 +34,4 @@ plot -Vpower:power
 meas tran power_avg avg Vpower:power
 wrdata power_consumption.txt Vpower:power
 .endc
-* Leakage power estimation: 49.90163999999999 nW
+* Leakage power estimation: 118.75824 nW

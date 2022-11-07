@@ -7,15 +7,20 @@
 .include ./FreePDK45/osu_soc/lib/source/netlists/INVX1.pex.netlist
 .include ./FreePDK45/osu_soc/lib/source/netlists/XOR2X1.pex.netlist
 .include ./FreePDK45/osu_soc/lib/source/netlists/XNOR2X1.pex.netlist
-.option TEMP=25c
+.option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vin0 V0 0 dc pulse (0 1.1 4n 1n 1n 1n 1n)
-Vin1 V1 0 dc pulse (0 1.1 3n 1n 1n 6n 6n)
-Vin2 V2 0 dc pulse (0 1.1 9n 1n 1n 3n 6n)
-Vin3 V3 0 dc pulse (0 1.1 8n 1n 1n 3n 4n)
-Vin4 V4 0 dc pulse (0 1.1 1n 1n 1n 7n 7n)
-Cload34 V34 0 1nF
+Vin0 V0_ 0 dc pulse (0 1.1 6n 1n 1n 27n 47n)
+XBUFIN0 V0 Vss Vdd V0_ BUFX2
+Vin1 V1_ 0 dc pulse (0 1.1 4n 1n 1n 26n 48n)
+XBUFIN1 V1 Vss Vdd V1_ BUFX2
+Vin2 V2_ 0 dc pulse (0 1.1 7n 1n 1n 26n 27n)
+XBUFIN2 V2 Vss Vdd V2_ BUFX2
+Vin3 V3_ 0 dc pulse (0 1.1 2n 1n 1n 24n 46n)
+XBUFIN3 V3 Vss Vdd V3_ BUFX2
+Vin4 V4_ 0 dc pulse (0 1.1 8n 1n 1n 24n 41n)
+XBUFIN4 V4 Vss Vdd V4_ BUFX2
+Cload34 V34 0 0.00155103pF
 XAND5 V2 V2 Vdd Vss V5 AND2X1
 XBUF6 V6 Vss Vdd V4 BUFX2
 XAND7 V2 V0 Vdd Vss V7 AND2X1
@@ -46,7 +51,7 @@ XNAND31 V14 Vss V6 V31 Vdd NAND2X1
 XOR32 V7 V25 Vdd Vss V32 OR2X1
 XAND33 V15 V2 Vdd Vss V33 AND2X1
 XOR34 V8 V34 V1 Vdd Vss XOR2X1
-.tran 1n 1u
+.tran 0.1n 100n
 .probe P(Vpower)
 .control
 run
@@ -54,3 +59,4 @@ plot -Vpower:power
 meas tran power_avg avg Vpower:power
 wrdata power_consumption.txt Vpower:power
 .endc
+* Leakage power estimation: 558.5509599999999 nW
