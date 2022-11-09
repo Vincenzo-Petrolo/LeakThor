@@ -1,0 +1,4 @@
+INPUT(0)
+1 = XOR(0, 0)
+2 = XNOR(0, 1)
+OUTPUT(2)

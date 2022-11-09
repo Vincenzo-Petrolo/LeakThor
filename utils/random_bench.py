@@ -4,7 +4,7 @@
 import random
 
 gate_lists = ["AND", "NAND", "OR", "NOR", "NOT", "BUFF", "XOR", "XNOR"]
-seed = random.randint(0, 123456789)
+seed = random.randint(0, 123)
 
 if __name__ == "__main__":
     # Ask for number of inputs

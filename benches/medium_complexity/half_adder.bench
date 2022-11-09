@@ -1,0 +1,6 @@
+INPUT(a)
+INPUT(b)
+c = AND(a,b)
+s = XOR(a,b)
+OUTPUT(c)
+OUTPUT(s)
