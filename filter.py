@@ -7,64 +7,71 @@ import pandas
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
-from scipy.fft import fft, fftfreq
+from scipy.fft import fft, fftfreq, ifft
+import scipy
 
+def brickwall_filter(spectral_power):
+    filtered = spectral_power.copy()
+    n_samples = len(filtered)
+    filtered[1:n_samples-2] = 0
 
+    return filtered
 
-power_consumtpion_meas = "power_consumption.txt"
-
-if __name__ == "__main__":
+def load_power():
+    power_consumtpion_meas = "power_consumption.txt"
     df = pandas.read_csv(power_consumtpion_meas, sep='\s+')
     time_steps = []
     power_values = []
+    T = 1e-12 # Spacing between time values
 
     for value in df.values:
         time_steps.append(value[0])
         power_values.append(value[1])
     
     time = np.array(time_steps)
-    power = np.array(power_values)
+    power = -np.array(power_values)
+
+    return time, power, T
+
+def load_power_dummy():
+    time = np.linspace(0, 10*np.pi, 10**3)
+    power = np.sin(2*np.pi*time) + 2
+    T = 10*np.pi/(10**3)
+    return time, power, T
+    
+
+
+
+
+if __name__ == "__main__":
+    time, power, T = load_power()
+
+
+    # Parameters
+    n_samples = len(power)
+
+    # ====== Compute FFT =======
 
     power_spectrum = fft(power)
 
-    sampling_freq = 1e9
+    xf = fftfreq(n_samples, T)[:int(n_samples/2)]
+    ## Apply brickwall filter
+    #filtered_spectrum = brickwall_filter(power_spectrum)
+    # Apply median filter
+    kernel_size = 7001
+    filtered = scipy.signal.medfilt(power, kernel_size)
+    filtered_specturm = fft(filtered)
+    ## Compute the inverse fft
+    #filtered = ifft(filtered_spectrum)
 
-    # Parameters should be order around 7 and cutoff no lower than 1e-4
-    # The loss in dB should be 0 at frequency 0
-    # Find the correct parameters to achieve that
-    b,a = signal.butter(5, 0.002, btype='low')
+    print(f"Avg power: {np.mean(power)} | Avg leakage {np.abs(np.mean(filtered))}")
 
-    filtered = signal.lfilter(b, a, -power)
-
-    print(f"Average leakage: {np.average(filtered)}")
-    fitered_spectrum = fft(filtered)
-    print(f"Average total: {np.average(-power)}")
-    
-    n_samples = len(power)
-    dt = 1e-10
-    xf = fftfreq(n_samples, dt)[:int(n_samples/2)]
-
-    # Compute the digital filter response
-    w, h = signal.freqz(b,a)
-    fig = plt.figure()
-    plt.plot(w, 20 * np.log10(abs(h)), 'b')
-    plt.show()
-
-
-
-
-
-
-
-
-
-
-
+    # ====== Plot =======
 
     fig, [(ax1, ax2), (ax3, ax4)] = plt.subplots(2, 2)
-    ax1.plot(time, -power)
+    ax1.plot(time, power)
     ax2.plot(time, filtered)
-    ax3.plot(xf, 2.0/n_samples * np.abs(fitered_spectrum[0:int(n_samples/2)]))
+    ax3.plot(xf, 2.0/n_samples * np.abs(filtered_specturm[0:int(n_samples/2)]))
     ax4.plot(xf, 2.0/n_samples * np.abs(power_spectrum[0:int(n_samples/2)]))
     ax1.set_xlabel("Time [s]")
     ax2.set_xlabel("Time [s]")

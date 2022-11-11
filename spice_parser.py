@@ -72,12 +72,12 @@ class SpiceParser(object):
         # The input switching uses Montecarlo to catch more randomness
         with open(filename, 'a') as f:
             for input in circuit.inputs.keys():
-                Td = 0#random.randint(1,10) # add delay picking randomly between 1 and 10
-                Tw = 100#random.randint(20,30) # width of pulse picking randomly between 1 and 10
-                To = 1000#random.randint(Tw,2*Tw) # period of pulse picking randomly between Twidth and 2Twidth
+                Td = random.randint(1,10) # add delay picking randomly between 1 and 10
+                Tw = random.randint(20,30) # width of pulse picking randomly between 1 and 10
+                To = random.randint(Tw,2*Tw) # period of pulse picking randomly between Twidth and 2Twidth
 
                 # PULSE PULSE(Vo V1 Td Tr Tf Tw To)
-                f.write(f"Vin{input} V{input} 0 dc pulse (0 1.1 {Td}n 1u 1u {Tw}u {To}u)\n")
+                f.write(f"Vin{input} V{input} 0 dc pulse (0 1.1 {Td}n 1n 1n {Tw}n {To}n)\n")
                 #f.write(f"Vin{input} V{input} 0 {random.choice([0])}\n")
                 # Create buffers to simulate a non ideal power supply
             f.close()
@@ -91,7 +91,7 @@ class SpiceParser(object):
 
     def _writeSimulationInfos(self, filename):
         with open(filename, 'a') as f:
-            f.write(".tran 1u 100u\n")
+            f.write(".tran 0.1n 100n 0 1p\n")
             f.write(".probe P(Vpower)\n")
             f.write(".control\n")
             f.write("run\n")
