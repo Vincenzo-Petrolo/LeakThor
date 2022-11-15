@@ -10,9 +10,10 @@
 .option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vina Va 0 dc pulse (0 1.1 9n 1n 1n 24n 42n)
+Vina Va 0 dc pulse (0 1.1 4n 1n 1n 27n 39n)
+Cloady Vy 0 0.00155103pF
 XINVy Va Vss Vdd Vy INVX1
-.tran 0.1n 50n 0 1p
+.tran 0.1n 100n 0 1p
 .probe P(Vpower)
 .control
 run

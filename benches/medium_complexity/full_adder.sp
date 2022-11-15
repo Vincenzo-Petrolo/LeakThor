@@ -10,9 +10,9 @@
 .option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vina Va 0 dc pulse (0 1.1 3n 1n 1n 25n 34n)
-Vinb Vb 0 dc pulse (0 1.1 10n 1n 1n 23n 38n)
-Vinc Vc 0 dc pulse (0 1.1 7n 1n 1n 29n 55n)
+Vina Va 0 dc pulse (0 1.1 4n 1n 1n 30n 40n)
+Vinb Vb 0 dc pulse (0 1.1 5n 1n 1n 30n 59n)
+Vinc Vc 0 dc pulse (0 1.1 7n 1n 1n 28n 30n)
 Cloads Vs 0 0.00155103pF
 Cloadc Vc 0 0.00155103pF
 XORd Vb Vd Va Vdd Vss XOR2X1

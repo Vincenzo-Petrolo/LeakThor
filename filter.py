@@ -10,13 +10,6 @@ import matplotlib.pyplot as plt
 from scipy.fft import fft, fftfreq, ifft
 import scipy
 
-def brickwall_filter(spectral_power):
-    filtered = spectral_power.copy()
-    n_samples = len(filtered)
-    filtered[1:n_samples-2] = 0
-
-    return filtered
-
 def load_power():
     power_consumtpion_meas = "power_consumption.txt"
     df = pandas.read_csv(power_consumtpion_meas, sep='\s+')
@@ -41,8 +34,6 @@ def load_power_dummy():
     
 
 
-
-
 if __name__ == "__main__":
     time, power, T = load_power()
 
@@ -51,18 +42,14 @@ if __name__ == "__main__":
     n_samples = len(power)
 
     # ====== Compute FFT =======
-
     power_spectrum = fft(power)
-
     xf = fftfreq(n_samples, T)[:int(n_samples/2)]
-    ## Apply brickwall filter
-    #filtered_spectrum = brickwall_filter(power_spectrum)
-    # Apply median filter
+
+    #  ====== Apply median filter ======
     kernel_size = 7001
     filtered = scipy.signal.medfilt(power, kernel_size)
+    # ====== Compute FFT for filtered signal =======
     filtered_specturm = fft(filtered)
-    ## Compute the inverse fft
-    #filtered = ifft(filtered_spectrum)
 
     print(f"Avg power: {np.mean(power)} | Avg leakage {np.abs(np.mean(filtered))}")
 

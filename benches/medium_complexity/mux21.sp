@@ -10,9 +10,9 @@
 .option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vina Va 0 dc pulse (0 1.1 2n 1n 1n 24n 40n)
-Vinb Vb 0 dc pulse (0 1.1 5n 1n 1n 26n 33n)
-Vins Vs 0 dc pulse (0 1.1 5n 1n 1n 26n 28n)
+Vina Va 0 dc pulse (0 1.1 5n 1n 1n 27n 29n)
+Vinb Vb 0 dc pulse (0 1.1 7n 1n 1n 25n 31n)
+Vins Vs 0 dc pulse (0 1.1 7n 1n 1n 20n 31n)
 Cloady Vy 0 0.00155103pF
 XINVk Vs Vss Vdd Vk INVX1
 XANDa1 Va Vk Vdd Vss Va1 AND2X1

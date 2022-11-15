@@ -10,13 +10,11 @@
 .option TEMP=27c
 Vpower Vdd 0 1.1
 Vgnd Vss 0 0
-Vina Va_ 0 dc pulse (0 1.1 4n 1n 1n 30n 46n)
-XBUFINa Va Vss Vdd Va_ BUFX2
-Vinb Vb_ 0 dc pulse (0 1.1 6n 1n 1n 30n 46n)
-XBUFINb Vb Vss Vdd Vb_ BUFX2
+Vina Va 0 dc pulse (0 1.1 10n 1n 1n 23n 35n)
+Vinb Vb 0 dc pulse (0 1.1 6n 1n 1n 28n 46n)
 Cloady Vy 0 0.00155103pF
 XORy Vb Vy Va Vdd Vss XOR2X1
-.tran 0.1n 100n
+.tran 0.1n 100n 0 1p
 .probe P(Vpower)
 .control
 run
@@ -24,4 +22,4 @@ plot -Vpower:power
 meas tran power_avg avg Vpower:power
 wrdata power_consumption.txt Vpower:power
 .endc
-* Leakage power estimation: 84.65639999999999 nW
+* Leakage power estimation: 45.1492 nW
