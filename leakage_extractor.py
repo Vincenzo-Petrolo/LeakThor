@@ -54,5 +54,6 @@ if __name__ == "__main__":
     
     os.system("clear")
     print("Everything done, read the report on leakage_extraction_report.csv")
+    print("Everything done, you can also find useful plots under images section")
     
 
