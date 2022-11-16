@@ -7,7 +7,6 @@ import pandas
 import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
-from scipy.fft import fft, fftfreq, ifft
 import scipy
 
 def load_power():
@@ -42,14 +41,21 @@ if __name__ == "__main__":
     n_samples = len(power)
 
     # ====== Compute FFT =======
-    power_spectrum = fft(power)
-    xf = fftfreq(n_samples, T)[:int(n_samples/2)]
+    f1 = 0
+    f2 = int(2e9)
+    transform = signal.ZoomFFT(n_samples, [f1, f2], n_samples, fs=1/T, endpoint=True)
+    power_spectrum = transform(power)
+    xf1 = np.linspace(f1, f2, n_samples)
 
     #  ====== Apply median filter ======
-    kernel_size = 7001
+    # I use the median filter to remove the peaks by the signal
+    # It is a technique used to remove noise
+    kernel_size = int(n_samples/20)
+    if (kernel_size % 2 == 0): kernel_size += 1
+    print(f"Kernel size: {kernel_size}")
     filtered = scipy.signal.medfilt(power, kernel_size)
     # ====== Compute FFT for filtered signal =======
-    filtered_specturm = fft(filtered)
+    filtered_specturm = transform(filtered)
 
     print(f"Avg power: {np.mean(power)} | Avg leakage {np.abs(np.mean(filtered))}")
 
@@ -58,8 +64,8 @@ if __name__ == "__main__":
     fig, [(ax1, ax2), (ax3, ax4)] = plt.subplots(2, 2)
     ax1.plot(time, power)
     ax2.plot(time, filtered)
-    ax3.plot(xf, 2.0/n_samples * np.abs(filtered_specturm[0:int(n_samples/2)]))
-    ax4.plot(xf, 2.0/n_samples * np.abs(power_spectrum[0:int(n_samples/2)]))
+    ax3.plot(xf1, 2.0/n_samples * np.abs(filtered_specturm))
+    ax4.plot(xf1, 2.0/n_samples * np.abs(power_spectrum))
     ax1.set_xlabel("Time [s]")
     ax2.set_xlabel("Time [s]")
     ax3.set_xlabel("Frequency [Hz]")
