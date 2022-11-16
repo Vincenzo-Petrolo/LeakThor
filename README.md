@@ -5,6 +5,5 @@ Filter based leakage power extraction method to improve EDA tools leakage power 
 The directory should contain bench files
 
 ```bash
-
 python leakage_extractor.py <directory>
 ```
