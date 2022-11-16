@@ -95,7 +95,7 @@ class SpiceParser(object):
             f.write(".probe P(Vpower)\n")
             f.write(".control\n")
             f.write("run\n")
-            f.write("plot -Vpower:power\n")
+            #f.write("plot -Vpower:power\n")
             f.write("meas tran power_avg avg Vpower:power\n")
             f.write("wrdata power_consumption.txt Vpower:power\n")
             f.write(".endc\n")
