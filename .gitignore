@@ -130,3 +130,6 @@ dmypy.json
 
 # My stuff
 *.txt
+*.sp
+*.jpg
+*.csv
