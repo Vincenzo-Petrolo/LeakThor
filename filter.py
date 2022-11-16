@@ -33,7 +33,7 @@ def load_power_dummy():
     
 
 
-if __name__ == "__main__":
+def filter(kernel_size):
     time, power, T = load_power()
 
 
@@ -50,14 +50,12 @@ if __name__ == "__main__":
     #  ====== Apply median filter ======
     # I use the median filter to remove the peaks by the signal
     # It is a technique used to remove noise
-    kernel_size = int(n_samples/20)
     if (kernel_size % 2 == 0): kernel_size += 1
-    print(f"Kernel size: {kernel_size}")
     filtered = scipy.signal.medfilt(power, kernel_size)
     # ====== Compute FFT for filtered signal =======
     filtered_specturm = transform(filtered)
 
-    print(f"Avg power: {np.mean(power)} | Avg leakage {np.abs(np.mean(filtered))}")
+    return np.abs(np.mean(filtered))
 
     # ====== Plot =======
 
