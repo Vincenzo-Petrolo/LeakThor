@@ -8,6 +8,7 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 import scipy
+import os
 
 def load_power():
     power_consumtpion_meas = "power_consumption.txt"
@@ -33,7 +34,7 @@ def load_power_dummy():
     
 
 
-def filter(kernel_size):
+def filter(circ_name, kernel_size):
     time, power, T = load_power()
 
 
@@ -55,7 +56,6 @@ def filter(kernel_size):
     # ====== Compute FFT for filtered signal =======
     filtered_specturm = transform(filtered)
 
-    return np.abs(np.mean(filtered))
 
     # ====== Plot =======
 
@@ -67,6 +67,7 @@ def filter(kernel_size):
     ax1.set_xlabel("Time [s]")
     ax2.set_xlabel("Time [s]")
     ax3.set_xlabel("Frequency [Hz]")
+    ax4.set_xlabel("Frequency [Hz]")
     ax1.set_ylabel("Power [W]")
     ax2.set_ylabel("Leakage Power [W]")
     ax3.set_ylabel("Power Spectrum")
@@ -78,7 +79,9 @@ def filter(kernel_size):
     ax2.grid()
     ax3.grid()
     ax4.grid()
+    os.system("mkdir -p images")
     plt.tight_layout()
-    plt.show()
+    plt.savefig(f"images/{circ_name}.jpg", format="jpg")
 
+    return np.abs(np.mean(filtered))
 

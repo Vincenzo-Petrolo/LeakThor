@@ -46,7 +46,7 @@ if __name__ == "__main__":
         subprocess.call(f"ngspice -a {spice_filename}", shell=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
         print("Spice simulation done!")
         # Now call the filter which will read the power consumption report obtained from ngspice
-        leakage = filter.filter(kernel_size=2001)
+        leakage = filter.filter(circuit_name, kernel_size=2001)
         print("Leakage power extracted!")
         result_file.write(f"{circuit_name}, {leakage}\n")
 
