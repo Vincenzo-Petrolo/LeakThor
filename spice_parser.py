@@ -98,6 +98,7 @@ class SpiceParser(object):
             #f.write("plot -Vpower:power\n")
             f.write("meas tran power_avg avg Vpower:power\n")
             f.write("wrdata power_consumption.txt Vpower:power\n")
+            f.write("exit\n")
             f.write(".endc\n")
             f.write(f"* Leakage power estimation: {self.total_leak_power} nW\n")
             f.close()
