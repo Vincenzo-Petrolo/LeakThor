@@ -34,7 +34,7 @@ def load_power_dummy():
     
 
 
-def filter(circ_name, kernel_size):
+def filter(circ_name, kernel_fraction):
     time, power, T = load_power()
 
 
@@ -51,6 +51,7 @@ def filter(circ_name, kernel_size):
     #  ====== Apply median filter ======
     # I use the median filter to remove the peaks by the signal
     # It is a technique used to remove noise
+    kernel_size = int(len(power)/int(kernel_fraction))
     if (kernel_size % 2 == 0): kernel_size += 1
     filtered = scipy.signal.medfilt(power, kernel_size)
     # ====== Compute FFT for filtered signal =======
@@ -81,6 +82,7 @@ def filter(circ_name, kernel_size):
     ax4.grid()
     os.system("mkdir -p images")
     plt.tight_layout()
+    #plt.show()
     plt.savefig(f"images/{circ_name}.jpg", format="jpg")
 
     return np.abs(np.mean(filtered))

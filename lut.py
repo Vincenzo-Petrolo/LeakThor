@@ -1,9 +1,9 @@
 # Units in nW
-AND2X1_leak = 15.6059
-NAND2X1_leak = 3.29145
-NOR2X1_leak = 3.61973
-OR2X1_leak = 13.7435
-INVX1_leak = 1.74163
-BUFX2_leak = 19.7536
-XOR2X1_leak = 45.1492
-XNOR2X1_leak = 29.9796
+AND2X1_leak = 22.63
+NAND2X1_leak = 14.17
+NOR2X1_leak = 13.71
+OR2X1_leak = 19.43
+INVX1_leak = 7.68
+BUFX2_leak = 24.24
+XOR2X1_leak = 66.03
+XNOR2X1_leak = 70.84
